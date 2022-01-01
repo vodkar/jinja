@@ -218,6 +218,34 @@ def do_lower(s: str) -> str:
     return soft_str(s).lower()
 
 
+def do_items(value: t.Union[t.Mapping[K, V], Undefined]) -> t.Iterable[t.Tuple[K, V]]:
+    """Returns an iterator over the pairs of a mapping in the order that
+    the mapping's iterator returns.  In practical terms ``x|items`` is
+    the same as ``x.items()`` with two differences.  The first is that
+    if ``x`` is undefined an empty iterator is returned, secondly the
+    filter is a more portable version to alternative Jinja implementations
+    which might not have a ``.items()`` method on maps.
+
+    Example usage:
+
+    .. sourcecode:: html+jinja
+
+        <dl>
+        {% for key, value in my_dict|items %}
+            <dt>{{ key }}
+            <dd>{{ value }}
+        {% endfor %}
+        </dl>
+
+    .. versionadded:: 3.1
+    """
+    if isinstance(value, Undefined):
+        return
+    if not isinstance(value, abc.Mapping):
+        raise TypeError("Can only get pairs from mappings")
+    yield from value.items()
+
+
 @pass_eval_context
 def do_xmlattr(
     eval_ctx: "EvalContext", d: t.Mapping[str, t.Any], autospace: bool = True
@@ -1739,6 +1767,7 @@ FILTERS = {
     "length": len,
     "list": do_list,
     "lower": do_lower,
+    "items": do_items,
     "map": do_map,
     "min": do_min,
     "max": do_max,

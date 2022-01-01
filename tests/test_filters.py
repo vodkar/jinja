@@ -1,5 +1,6 @@
 import random
 from collections import namedtuple
+from collections import OrderedDict
 
 import pytest
 from markupsafe import Markup
@@ -250,6 +251,15 @@ class TestFilter:
         tmpl = env.from_string("""{{ "FOO"|lower }}""")
         out = tmpl.render()
         assert out == "foo"
+
+    def test_items(self, env):
+        d = OrderedDict()
+        d["a"] = 1
+        d["b"] = 2
+        d["c"] = 3
+        tmpl = env.from_string("""{{ d|items|list }}""")
+        out = tmpl.render(d=d)
+        assert out == "[('a', 1), ('b', 2), ('c', 3)]"
 
     def test_pprint(self, env):
         from pprint import pformat

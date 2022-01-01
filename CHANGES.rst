@@ -26,6 +26,7 @@ Unreleased
 -   The ``{% trans %}`` tag can use ``pgettext`` and ``npgettext`` by
     passing a context string as the first token in the tag, like
     ``{% trans "title" %}``. :issue:`1430`
+-   Add ``items`` filter. :issue:`1561`
 
 
 Version 3.0.3
