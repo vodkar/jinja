@@ -261,6 +261,11 @@ class TestFilter:
         out = tmpl.render(d=d)
         assert out == "[('a', 1), ('b', 2), ('c', 3)]"
 
+    def test_items_undefined(self, env):
+        tmpl = env.from_string("""{{ d|items|list }}""")
+        out = tmpl.render()
+        assert out == "[]"
+
     def test_pprint(self, env):
         from pprint import pformat
 
